@@ -1,10 +1,9 @@
 const express = require('express');
-const { connectDatabase } = require('./database/database');
-const {Blog}= require('./model/blogmodel');
+const { connectDatabase } = require('../database/database');
+const {Blog}= require('../model/blogmodel');
 
 const app = express();
 
-app.set('view engine','ejs')
 app.use(express.static("public"))
 // Middleware to parse JSON bodies
 app.use(express.json());

@@ -1,5 +1,5 @@
 const express = require('express');
-const { connectDatabase } = require('../database/database');
+const {connectDatabase} = require('../database/database');
 const {Blog}= require('../model/blogmodel');
 
 const app = express();
@@ -10,17 +10,6 @@ app.use(express.json());
 app.use(express.urlencoded({extended:false}))
 
 connectDatabase()
-
-
-app.get('/', (req, res) => {
-    res.render('home')
-});
-
-app.get('/about',(req,res)=>
-{
-    res.render('about')
-}
-);
 
 app.post('/createBlog', async (req, res) => {
     
@@ -61,11 +50,39 @@ app.get("/blogs/:id",async(req,res)=>
 
     res.json({
         message: "blog fetched",
-        data: blog
+        blog
     })
+    
 });
     
 app.listen(3000, () => {
     console.log('Node server has started on port 3000');
 });
 
+app.patch("/blogs/:id",async (req,res)=>
+{
+    const id = req.params.id
+   const{title,subTitle,description}=req.body
+   
+    await Blog.findByIdAndUpdate(id,{
+        title:title,
+        subTitle:subTitle,
+        description:description
+    })
+
+    res.json({
+        status :200,
+        message : "blog updated successfully"})
+
+})
+
+app.delete("/blogs/:id",async (req,res)=>
+    {
+        await Blog.findByIdAndDelete(req.params.id)       
+    
+        res.json({
+            status :200,
+            message : "blog deleted successfully"})
+    
+    })
+    
